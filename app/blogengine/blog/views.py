@@ -1,6 +1,14 @@
 from django.shortcuts import render
+from django.views import View
 
-# Create your views here.
+from .models import *
+
+
 def posts_list(request):
-    posts = ['One', 'Two', 'Three', 'Four', 'Five']
+    posts = Post.objects.all()
     return render(request, 'blog/index.html', context={'posts': posts})
+
+
+def tags_list(request):
+    tags = Tag.objects.all()
+    return render(request, 'blog/tags_list.html', context={'tags': tags})
