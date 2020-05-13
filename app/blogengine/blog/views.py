@@ -1,15 +1,51 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views import View
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 from .models import *
 from .utils import *
 from .forms import *
 
 
+def paginate(request, posts):
+    paginator = Paginator(posts, 3)
+    page_number = request.GET.get('page', 1)
+    page = paginator.get_page(page_number)
+    is_paginated = page.has_other_pages()
+
+    if page.has_next():
+        next_url = 'page={}'.format(page.next_page_number())
+    else:
+        next_url = ''
+    if page.has_previous():
+        prev_url = 'page={}'.format(page.previous_page_number())
+    else:
+        prev_url = ''
+
+    context = {
+        'page_obj': page,
+        'next_url': next_url,
+        'prev_url': prev_url,
+        'is_paginated': is_paginated,
+    }
+    return context
+
+
 def posts_list(request):
-    posts = Post.objects.all()
-    return render(request, 'blog/index.html', context={'posts': posts})
+    search_query = request.GET.get('search', '')
+    if search_query:
+        posts = Post.objects.filter(
+            Q(title__icontains=search_query) | Q(body__icontains=search_query)
+            )
+    else:
+        posts = Post.objects.all()
+
+    context = paginate(request, posts)
+    context['search'] = search_query
+
+    return render(request, 'blog/index.html', context)
 
 
 class PostDetails(ObjectDetailsMixin, View):

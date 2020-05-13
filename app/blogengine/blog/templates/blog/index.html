@@ -7,8 +7,10 @@
 {% block content %}
 
     <h1 class="mb-5">Posts:</h1>
-    {% for post in posts %}
+    {% include 'blog/includes/pagination_template.html' %}
+    {% for post in page_obj.object_list %}
         {% include 'blog/includes/post_card_template.html' %}
     {% endfor %}
+    {% include 'blog/includes/pagination_template.html' %}
 
 {% endblock %}
