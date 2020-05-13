@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import *
 from .forms import *
@@ -18,9 +19,10 @@ class ObjectDetailsMixin():
             })
 
 
-class ObjectCreateMixin():
+class ObjectCreateMixin(LoginRequiredMixin):
     template = None
     model_form = None
+    raise_exception = True
 
     def get(self, request):
         form = self.model_form
@@ -39,10 +41,11 @@ class ObjectCreateMixin():
                 })
 
 
-class ObjectUpdateMixin():
+class ObjectUpdateMixin(LoginRequiredMixin):
     model = None
     model_form = None
     template = None
+    raise_exception = True
 
     def get(self, request, slug):
         obj = self.model.objects.get(slug__iexact=slug)
@@ -65,10 +68,11 @@ class ObjectUpdateMixin():
                 })
 
 
-class ObjectDeleteMixin():
+class ObjectDeleteMixin(LoginRequiredMixin):
     model = None
     template = None
     redirect_url = None
+    raise_exception = True
 
     def get(self, request, slug):
         obj = self.model.objects.get(slug__iexact=slug)
