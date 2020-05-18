@@ -28,7 +28,7 @@ class TagForm(forms.ModelForm):
     def clean_title(self):
         title = self.cleaned_data['title']
         existence = self.Meta.model.objects.filter(
-                            title__iexact=title
+                            title__exact=title
                             ).exists()
         if existence:
             raise ValidationError(

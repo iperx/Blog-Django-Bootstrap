@@ -16,6 +16,9 @@ class Post(models.Model):
     tags = models.ManyToManyField('Tag', blank=True, related_name='posts')
     date_pub = models.DateTimeField(auto_now_add=True)
 
+    def get_create_url(self):
+        return reverse('post_create_url')
+
     def get_absolute_url(self):
         return reverse('post_details_url', kwargs={'slug': self.slug})
 
@@ -40,6 +43,9 @@ class Post(models.Model):
 class Tag(models.Model):
     title = models.CharField(max_length=50, db_index=True)
     slug = models.CharField(max_length=50, blank=True, unique=True)
+
+    def get_create_url(self):
+        return reverse('tag_create_url')
 
     def get_absolute_url(self):
         return reverse('tag_details_url', kwargs={'slug': self.slug})

@@ -27,7 +27,8 @@ class ObjectCreateMixin(LoginRequiredMixin):
     def get(self, request):
         form = self.model_form
         return render(request, self.template, context={
-            'form': form
+            'form': form,
+            'model': form._meta.model.__name__.lower(),
             })
 
     def post(self, request):
@@ -37,7 +38,8 @@ class ObjectCreateMixin(LoginRequiredMixin):
             return redirect(new_obj)
         else:
             return render(request, self.template, context={
-                'form': bound_form
+                'form': bound_form,
+                'model': bound_form._meta.model.__name__.lower(),
                 })
 
 
@@ -52,7 +54,8 @@ class ObjectUpdateMixin(LoginRequiredMixin):
         bound_form = self.model_form(instance=obj)
         return render(request, self.template, context={
             'form': bound_form, 
-            self.model.__name__.lower(): obj
+            'obj': obj,
+            'model': self.model.__name__.lower(),
             })
 
     def post(self, request, slug):
@@ -64,7 +67,8 @@ class ObjectUpdateMixin(LoginRequiredMixin):
         else:
             return render(request, self.template, context={
                 'form': bound_form, 
-                self.model.__name__.lower(): obj
+                'obj': obj,
+                'model': self.model.__name__.lower(),
                 })
 
 
