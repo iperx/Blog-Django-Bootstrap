@@ -14,10 +14,10 @@ This django project is made for educational purposes. It contains: implementatio
 ```pipenv install```
 4. Launch virtual environment:  
 ```pipenv shell```
-5. Synchronize the database state with the current set of models and migrations:
+5. Synchronize the database state with the current set of models and migrations:  
 ```./app/blogengine/manage.py migrate```
-6. Create superuser (create an admin account):
+6. Create superuser (create an admin account):  
 ```./app/blogengine/manage.py createsuperuser```
-7. Run server:
+7. Run server:  
 ```./app/blogengine/manage.py runserver 5000```
 8. Log in to your admin account on 'http://localhost:5000/admin/' to access the admin panel (access to CRUD)
