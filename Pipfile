@@ -8,7 +8,7 @@ verify_ssl = true
 [packages]
 pytz = "==2020.1"
 sqlparse = "==0.3.1"
-Django = "==2.2.21"
+Django = "==2.2.22"
 
 [requires]
 python_version = "3.5"
