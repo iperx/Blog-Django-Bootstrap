@@ -1,20 +1,29 @@
 from django.db import models
-from django.utils.text import slugify
 from django.urls import reverse
-from time import time
 
 
-def gen_slug(s):
-    new_slug = slugify(s)
-    return new_slug + '-' + str(int(time()))
+POST_MAX_LENGTH = 150
+TAG_MAX_LENGTH = 50
+# Equals to dash symbol plus Unix time length in seconds
+SLUG_SUFFIX_LENGTH = 11
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=150, db_index=True)
-    slug = models.CharField(max_length=150, blank=True, unique=True)
-    body = models.TextField(blank=True, db_index=True)
+    """Post model"""
+
+    title = models.CharField(
+        verbose_name='Title', max_length=POST_MAX_LENGTH,
+        db_index=True
+    )
+    slug = models.SlugField(
+        verbose_name='Slug', max_length=POST_MAX_LENGTH+SLUG_SUFFIX_LENGTH,
+        db_index=True, blank=True, unique=True
+    )
+    body = models.TextField(verbose_name='Body', blank=True, db_index=True)
+    date_pub = models.DateTimeField(
+        verbose_name='Publication date', auto_now_add=True
+    )
     tags = models.ManyToManyField('Tag', blank=True, related_name='posts')
-    date_pub = models.DateTimeField(auto_now_add=True)
 
     def get_create_url(self):
         return reverse('post_create_url')
@@ -28,11 +37,6 @@ class Post(models.Model):
     def get_delete_url(self):
         return reverse('post_delete_url', kwargs={'slug': self.slug})
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.slug = gen_slug(self.title)
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return self.title
 
@@ -41,8 +45,16 @@ class Post(models.Model):
 
 
 class Tag(models.Model):
-    title = models.CharField(max_length=50, db_index=True)
-    slug = models.CharField(max_length=50, blank=True, unique=True)
+    """Tag model"""
+
+    title = models.CharField(
+        verbose_name='Title', max_length=TAG_MAX_LENGTH,
+        db_index=True, unique=True
+    )
+    slug = models.SlugField(
+        verbose_name='Slug', max_length=TAG_MAX_LENGTH+SLUG_SUFFIX_LENGTH,
+        db_index=True, blank=True, unique=True
+    )
 
     def get_create_url(self):
         return reverse('tag_create_url')
@@ -55,11 +67,6 @@ class Tag(models.Model):
 
     def get_delete_url(self):
         return reverse('tag_delete_url', kwargs={'slug': self.slug})
-
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.slug = gen_slug(self.title)
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

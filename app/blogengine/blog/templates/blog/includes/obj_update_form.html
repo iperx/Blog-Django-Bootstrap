@@ -9,8 +9,10 @@
                 </div>
             {% endif %}
 
-            {{ field.label }}
-            {{ field }}
+            {% if not field.is_hidden %}
+                {{ field.label }}
+                {{ field }}
+            {% endif %}
         </div>
     {% endfor %}
     <button type="submit" class="btn btn-primary">Update {{ model }}</button>
