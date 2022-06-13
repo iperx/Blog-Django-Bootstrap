@@ -7,8 +7,9 @@
 {% block content %}
 
     <h1 class="mb-5">Tags:</h1>
-    {% for tag in tags %}
+    {% for tag in page_obj.object_list %}
         <h5 class="mb-5"><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></h5>
     {% endfor %}
+    {% include 'blog/includes/pagination_template.html' %}
 
 {% endblock %}
