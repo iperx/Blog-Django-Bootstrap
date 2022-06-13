@@ -15,7 +15,7 @@ class Post(models.Model):
         verbose_name='Title', max_length=POST_MAX_LENGTH,
         db_index=True
     )
-    slug = models.SlugField(
+    slug = models.CharField(
         verbose_name='Slug', max_length=POST_MAX_LENGTH+SLUG_SUFFIX_LENGTH,
         db_index=True, blank=True, unique=True
     )
@@ -51,7 +51,7 @@ class Tag(models.Model):
         verbose_name='Title', max_length=TAG_MAX_LENGTH,
         db_index=True, unique=True
     )
-    slug = models.SlugField(
+    slug = models.CharField(
         verbose_name='Slug', max_length=TAG_MAX_LENGTH+SLUG_SUFFIX_LENGTH,
         db_index=True, blank=True, unique=True
     )
