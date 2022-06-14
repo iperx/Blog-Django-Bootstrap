@@ -38,27 +38,7 @@ class PaginationMixin:
         return context
 
 
-class SearchMixin:
-    """Adds a simple search for model objects"""
-
-    def search(self, search_query):
-        """
-        Look up for particular results according to user search query.
-        Returns QuerySet object
-        """
-        if hasattr(self.model, 'body'):
-            obj_list = self.model.objects.filter(
-                Q(title__icontains=search_query) |
-                Q(body__icontains=search_query)
-            )
-        else:
-            obj_list = self.model.objects.filter(
-                title__icontains=search_query
-                )
-        return obj_list
-
-
-class ObjectListMixin(PaginationMixin, SearchMixin):
+class ObjectListMixin(PaginationMixin):
     model = None
     template = None
 
@@ -86,6 +66,22 @@ class ObjectListMixin(PaginationMixin, SearchMixin):
                 'is_paginated': False
             }
         return render(request, self.template, context)
+
+    def search(self, search_query):
+        """
+        Look up for model objects according to user search query.
+        Returns QuerySet object
+        """
+        if hasattr(self.model, 'body'):
+            obj_list = self.model.objects.filter(
+                Q(title__icontains=search_query) |
+                Q(body__icontains=search_query)
+            )
+        else:
+            obj_list = self.model.objects.filter(
+                title__icontains=search_query
+                )
+        return obj_list
 
 
 class ObjectDetailsMixin(PaginationMixin):
