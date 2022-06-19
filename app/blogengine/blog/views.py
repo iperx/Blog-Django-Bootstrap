@@ -1,6 +1,8 @@
+from django.urls import reverse_lazy
 from django.views import View
+from django.views import generic
 
-from .forms import PostForm, TagForm
+from .forms import PostForm, TagForm, SignUpForm
 from .models import Post, Tag
 from .utils import (
     ObjectListMixin,
@@ -9,6 +11,12 @@ from .utils import (
     ObjectUpdateMixin,
     ObjectDeleteMixin
 )
+
+
+class SignUpView(generic.CreateView):
+    form_class = SignUpForm
+    template_name = 'blog/sign_up.html'
+    success_url = reverse_lazy('posts_list_url')
 
 
 class PostList(ObjectListMixin, View):
