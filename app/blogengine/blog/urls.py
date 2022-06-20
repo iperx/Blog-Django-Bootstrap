@@ -1,6 +1,10 @@
 from django.urls import path
 
-from .views import *
+from .views import (
+    PostList, PostCreate, PostDetails, PostUpdate, PostDelete,
+    TagList, TagCreate, TagDetails, TagUpdate, TagDelete,
+    SignUpView, SignInView, SignOutView
+)
 
 
 urlpatterns = [
