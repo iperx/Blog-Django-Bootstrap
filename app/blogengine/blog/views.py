@@ -1,8 +1,9 @@
 from django.urls import reverse_lazy
 from django.views import View
 from django.views import generic
+from django.contrib.auth.views import LoginView, LogoutView
 
-from .forms import PostForm, TagForm, SignUpForm
+from .forms import PostForm, TagForm, SignUpForm, SignInForm
 from .models import Post, Tag
 from .utils import (
     ObjectListMixin,
@@ -17,6 +18,18 @@ class SignUpView(generic.CreateView):
     form_class = SignUpForm
     template_name = 'blog/sign_up.html'
     success_url = reverse_lazy('posts_list_url')
+
+
+class SignInView(LoginView):
+    form_class = SignInForm
+    template_name = 'blog/sign_in.html'
+
+    def get_success_url(self):
+        return reverse_lazy('posts_list_url')
+
+
+class SignOutView(LogoutView):
+    next_page = reverse_lazy('posts_list_url')
 
 
 class PostList(ObjectListMixin, View):
