@@ -17,7 +17,7 @@ from .utils import (
 class SignUpView(generic.CreateView):
     form_class = SignUpForm
     template_name = 'blog/sign_up.html'
-    success_url = reverse_lazy('posts_list_url')
+    success_url = reverse_lazy('sign_in_url')
 
 
 class SignInView(LoginView):
