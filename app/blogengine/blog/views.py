@@ -6,8 +6,6 @@ from django.contrib.auth.views import LoginView, LogoutView
 from .forms import PostForm, TagForm, SignUpForm, SignInForm
 from .models import Post, Tag
 from .utils import (
-    ObjectListMixin,
-    ObjectDetailsMixin,
     ObjectCreateMixin,
     ObjectUpdateMixin,
     ObjectDeleteMixin
@@ -32,16 +30,17 @@ class SignOutView(LogoutView):
     next_page = reverse_lazy('posts_list_url')
 
 
-class PostList(ObjectListMixin, View):
+class PostList(generic.ListView):
     model = Post
-    template = 'blog/index.html'
-    pagination = True
-    page_size = 3
+    queryset = Post.objects.prefetch_related('tags')
+    paginate_by = 3
+    template_name = 'blog/index.html'
 
 
-class PostDetails(ObjectDetailsMixin, View):
+class PostDetails(generic.DetailView):
     model = Post
-    template = 'blog/post_details.html'
+    queryset = Post.objects.all()
+    template_name = 'blog/post_details.html'
 
 
 class PostCreate(ObjectCreateMixin, View):
@@ -61,18 +60,22 @@ class PostDelete(ObjectDeleteMixin, View):
     redirect_url = 'posts_list_url'
 
 
-class TagList(ObjectListMixin, View):
+class TagList(generic.ListView):
     model = Tag
-    template = 'blog/tags_list.html'
-    pagination = True
-    page_size = 5
+    queryset = Tag.objects.all()
+    template_name = 'blog/tags_list.html'
+    paginate_by = 5
 
 
-class TagDetails(ObjectDetailsMixin, View):
+class TagDetails(generic.ListView):
     model = Tag
-    template = 'blog/tag_details.html'
-    pagination = True
-    page_size = 3
+    template_name = 'blog/tag_details.html'
+    paginate_by = 3
+
+    def get_queryset(self):
+        return Post.objects.filter(
+            tags__slug__iexact=self.kwargs.get('slug')
+            ).prefetch_related('tags')
 
 
 class TagCreate(ObjectCreateMixin, View):
