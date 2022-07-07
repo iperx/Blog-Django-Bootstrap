@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="mb-5">Posts with "{{ tag }}"" tag:</h1>
+    <h1 class="mb-5">Posts with "{{ tag.title }}" tag:</h1>
     {% include 'blog/includes/pagination_template.html' %}
     {% for post in page_obj.object_list %}
         {% include 'blog/includes/post_card_template.html' %}

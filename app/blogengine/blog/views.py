@@ -1,7 +1,8 @@
+from django.contrib.auth.views import LoginView, LogoutView
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views import generic
-from django.contrib.auth.views import LoginView, LogoutView
 
 from .forms import PostForm, TagForm, SignUpForm, SignInForm
 from .models import Post, Tag
@@ -68,15 +69,18 @@ class TagList(generic.ListView):
 
 
 class TagDetails(generic.ListView):
-    model = Tag
     template_name = 'blog/tag_details.html'
     paginate_by = 3
 
     def get_queryset(self):
-        return Post.objects.filter(
-            tags__slug__iexact=self.kwargs.get('slug')
-            ).prefetch_related('tags')
-
+        tag = get_object_or_404(Tag, slug=self.kwargs.get('slug'))
+        posts = Post.objects.prefetch_related('tags').filter(
+            tags__slug=tag.slug
+        )
+        self.extra_context = {
+            'tag': tag,
+        }
+        return posts
 
 class TagCreate(ObjectCreateMixin, View):
     model_form = TagForm
