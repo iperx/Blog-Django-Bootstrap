@@ -43,6 +43,10 @@ class PostDetails(generic.DetailView):
     queryset = Post.objects.all()
     template_name = 'blog/post_details.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['admin_object'] = self.object
+        return context
 
 class PostCreate(ObjectCreateMixin, View):
     model_form = PostForm
@@ -69,18 +73,34 @@ class TagList(generic.ListView):
 
 
 class TagDetails(generic.ListView):
+    """Retrieves all posts containing a particular tag"""
+    
+    model = Tag
     template_name = 'blog/tag_details.html'
     paginate_by = 3
 
+    def get(self, request, *args, **kwargs):
+        # The variable is made to avoid multiple similar queries
+        # and to have the tag object always on hand
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self):
+        return get_object_or_404(self.model, slug=self.kwargs.get('slug'))
+
     def get_queryset(self):
-        tag = get_object_or_404(Tag, slug=self.kwargs.get('slug'))
         posts = Post.objects.prefetch_related('tags').filter(
-            tags__slug=tag.slug
+            tags__slug=self.object.slug
         )
-        self.extra_context = {
-            'tag': tag,
-        }
         return posts
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'tag': self.object,
+            'admin_object': self.object,
+        })
+        return context
 
 class TagCreate(ObjectCreateMixin, View):
     model_form = TagForm
