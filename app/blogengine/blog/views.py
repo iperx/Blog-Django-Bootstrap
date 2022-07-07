@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -48,9 +49,10 @@ class PostDetails(generic.DetailView):
         context['admin_object'] = self.object
         return context
 
-class PostCreate(ObjectCreateMixin, View):
-    model_form = PostForm
-    template = 'blog/post_create.html'
+
+class PostCreate(LoginRequiredMixin, generic.CreateView):
+    form_class = PostForm
+    template_name = 'blog/post_create.html'
 
 
 class PostUpdate(ObjectUpdateMixin, View):
@@ -102,9 +104,10 @@ class TagDetails(generic.ListView):
         })
         return context
 
-class TagCreate(ObjectCreateMixin, View):
-    model_form = TagForm
-    template = 'blog/tag_create.html'
+
+class TagCreate(LoginRequiredMixin, generic.CreateView):
+    form_class = TagForm
+    template_name = 'blog/tag_create.html'
 
 
 class TagUpdate(ObjectUpdateMixin, View):
