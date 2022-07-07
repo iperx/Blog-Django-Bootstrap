@@ -1,6 +1,6 @@
 # Blog-Django-Bootstrap
 ## Description
-This django project is made for educational purposes. It contains: implementation of CRUD operations for posts and tags, pagination, slugs, simple search engine and snippets.
+This django project is made for educational purposes. It contains: implementation of CRUD operations for posts and tags, authentication, pagination, slugs, snippets.
 
 * Python version is 3.9.13
 * Frontend framework - Bootstrap v4.5.2
