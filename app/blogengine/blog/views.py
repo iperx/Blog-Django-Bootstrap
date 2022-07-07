@@ -55,10 +55,10 @@ class PostCreate(LoginRequiredMixin, generic.CreateView):
     template_name = 'blog/post_create.html'
 
 
-class PostUpdate(ObjectUpdateMixin, View):
+class PostUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Post
-    model_form = PostForm
-    template = 'blog/post_update.html'
+    form_class = PostForm
+    template_name = 'blog/post_update.html'
 
 
 class PostDelete(ObjectDeleteMixin, View):
@@ -110,10 +110,10 @@ class TagCreate(LoginRequiredMixin, generic.CreateView):
     template_name = 'blog/tag_create.html'
 
 
-class TagUpdate(ObjectUpdateMixin, View):
+class TagUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Tag
-    model_form = TagForm
-    template = 'blog/tag_update.html'
+    form_class = TagForm
+    template_name = 'blog/tag_update.html'
 
 
 class TagDelete(ObjectDeleteMixin, View):
