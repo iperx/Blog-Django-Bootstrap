@@ -61,10 +61,10 @@ class PostUpdate(LoginRequiredMixin, generic.UpdateView):
     template_name = 'blog/post_update.html'
 
 
-class PostDelete(ObjectDeleteMixin, View):
+class PostDelete(LoginRequiredMixin, generic.DeleteView):
     model = Post
-    template = 'blog/post_delete.html'
-    redirect_url = 'posts_list_url'
+    template_name = 'blog/post_delete.html'
+    success_url = reverse_lazy('posts_list_url')
 
 
 class TagList(generic.ListView):
@@ -116,7 +116,7 @@ class TagUpdate(LoginRequiredMixin, generic.UpdateView):
     template_name = 'blog/tag_update.html'
 
 
-class TagDelete(ObjectDeleteMixin, View):
+class TagDelete(LoginRequiredMixin, generic.DeleteView):
     model = Tag
-    template = 'blog/tag_delete.html'
-    redirect_url = 'tags_list_url'
+    template_name = 'blog/tag_delete.html'
+    success_url = reverse_lazy('tags_list_url')
